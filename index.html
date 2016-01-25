@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <main ng-controller="AppCtrl as appCtrl" ng-class="appCtrl.message ? '__details-active' : '' ">
+
+    <sidebar></sidebar>
+
+    <mail-list></mail-list>
+
+    <mail-details></mail-details>
+
+  </main>
+
+  <script src="https://code.angularjs.org/1.4.8/angular.js"></script>
+  <script>
+    (function() {
+
+      angular
+        .module('appControllers', [])
+        .controller('AppCtrl', AppCtrl)
+        .controller('SidebarCtrl', SidebarCtrl)
+        .controller('MailListCtrl', MailListCtrl)
+        .controller('EmailCtrl', EmailCtrl)
+        .controller('MailDetailsCtrl', MailDetailsCtrl);
+
+      angular
+        .module('appDirectives', [])
+        .directive('sidebar', sidebarDirective)
+        .directive('mailList', mailListDirective)
+        .directive('email', emailDirective)
+        .directive('mailDetails', mailDetailsDirective);
+
+      angular
+        .module('appServices', [])
+        .factory('mailService', mailService);
+
+      angular
+        .module('app', ['appControllers', 'appDirectives', 'appServices']);
+
+// ================================================================================
+// SERVICES
+// ================================================================================
+
+    function mailService($q, $timeout) {
+        var service = {
+          getEmails: getEmails
+        };
+
+        var messages = {};
+
+        messages.inbox = [{
+          from: 'user',
+          subject: 'hello',
+          message: 'this is a first inbox message',
+          date: 'Jan 1'
+        }, {
+          from: 'user2',
+          subject: 'hello2',
+          message: 'this is a second inbox message',
+          date: 'Jan 2'
+        }, {
+          from: 'user3',
+          subject: 'hello3',
+          message: 'this is a third inbox message',
+          date: 'Jan 3'
+        }];
+
+        messages.sent = [{
+          from: 'user',
+          subject: 'sent email',
+          message: 'this is a first sent email',
+          date: 'Jan 5'
+        }, {
+          from: 'user8',
+          subject: 'sent email2',
+          message: 'this is a second sent email',
+          date: 'Jan 8'
+        }, {
+          from: 'user8',
+          subject: 'sent email3',
+          message: 'this is a third sent email',
+          date: 'Jan 8'
+        }];
+
+        messages.spam = [{
+          from: 'user',
+          subject: 'spam',
+          message: 'spam message 1',
+          date: 'Jan 8'
+        }, {
+          from: 'user2',
+          subject: 'spam2',
+          message: 'spam message 2',
+          date: 'Jan 14'
+        }, {
+          from: 'user3',
+          subject: 'spam3',
+          message: 'spam message 3',
+          date: 'Jan 19'
+        }];
+
+        messages.trash = [{
+          from: 'user',
+          subject: 'trash email',
+          message: 'this is a first deleted email',
+          date: 'Jan 5'
+        }, {
+          from: 'user8',
+          subject: 'trash email2',
+          message: 'this is a second deleted email',
+          date: 'Jan 8'
+        }, {
+          from: 'user8',
+          subject: 'trash email3',
+          message: 'this is a third deleted email',
+          date: 'Jan 8'
+        }];
+
+
+        return service;
+
+        function getEmails() {
+          var dfd = $q.defer();
+
+          $timeout(function() {
+            dfd.resolve(messages);
+          }, 3000);
+
+          return dfd.promise;
+        }
+
+      }
+
+
+      // ================================================================================
+      // DIRECTIVES
+      // ================================================================================
+
+      function sidebarDirective() {
+        return {
+          retrict: 'E',
+          templateUrl: 'sidebar.directive.html',
+          controller: 'SidebarCtrl',
+          controllerAs: 'sidebarCtrl',
+          bindToController: true,
+          link: function() {
+            console.log(this)
+          }
+        };
+      }
+
+      function mailListDirective() {
+        return {
+          retrict: 'E',
+          templateUrl: 'mailList.directive.html',
+          controller: 'MailListCtrl',
+          controllerAs: 'mailListCtrl'
+        };
+      }
+
+      function emailDirective() {
+        return {
+          retrict: 'E',
+          templateUrl: 'email.directive.html',
+          controller: 'EmailCtrl',
+          controllerAs: 'emailCtrl'
+        };
+      }
+
+      function mailDetailsDirective() {
+        return {
+          retrict: 'E',
+          templateUrl: 'mailDetails.directive.html',
+          controller: 'MailDetailsCtrl',
+          controllerAs: 'mailDetailsCtrl'
+        };
+      }
+
+
+      // ================================================================================
+      // CONTROLLERS
+      // ================================================================================
+
+      function AppCtrl() {
+        var vm = this;
+
+        vm.activeMailbox = 'inbox';
+      }
+
+      function SidebarCtrl($scope) {
+        var vm = this;
+
+        $scope.appCtrl.categories = [{
+          name: 'Inbox',
+          id: 'inbox'
+        }, {
+          name: 'Sent Mail',
+          id: 'sent'
+        }, {
+          name: 'Spam',
+          id: 'spam'
+        }, {
+          name: 'Trash',
+          id: 'trash'
+        }, {
+          name: 'All Mail',
+          id: 'all'
+        }];
+
+        vm.openMailbox = openMailbox;
+
+        function openMailbox(id) {
+          $scope.appCtrl.activeMailbox = id;
+          $scope.appCtrl.message = '';
+        }
+
+      }
+
+      function MailListCtrl(mailService) {
+        var vm = this;
+
+        vm.messages = {};
+
+        mailService.getEmails().then(function(data) {
+          vm.messages = data;
+        });
+
+      }
+
+      function EmailCtrl($scope) {
+        var vm = this;
+
+        vm.showMessage = showMessage;
+
+        function showMessage(message) {
+          $scope.appCtrl.message = message;
+        }
+      }
+
+      function MailDetailsCtrl($scope) {
+        var vm = this;
+
+        vm.openMailList = openMailList;
+
+        function openMailList() {
+          $scope.appCtrl.message = '';
+        }
+      }
+
+    })();
+  </script>
+
+</body>
+
+</html>

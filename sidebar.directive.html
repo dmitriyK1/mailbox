@@ -1,0 +1,3 @@
+<ul>
+  <li ng-class="appCtrl.activeMailbox === category.id ? '__active' : ''" ng-repeat="category in appCtrl.categories" ng-click="sidebarCtrl.openMailbox(category.id)" ng-bind="category.name"></li>
+</ul>

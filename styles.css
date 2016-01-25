@@ -1,0 +1,136 @@
+html {
+    font-family: Arial;
+    font-size: 1.2rem;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+main {
+    display: flex;
+}
+
+.__details-active mail-details {
+    display: block;
+}
+
+.__details-active mail-list {
+    display: none;
+}
+
+.button {
+    display: inline-block;
+    cursor: pointer;
+    -webkit-appearance: none;
+    transition: background-color .25s ease-out, color .25s ease-out;
+    border: 1px solid transparent;
+    border-radius: 0;
+    padding: .85em 1em;
+    margin: 0 0 1rem;
+    font-size: .9rem;
+    background-color: #2199e8;
+    color: #fff;
+}
+
+.button:focus,
+.button:hover {
+    background-color: #1583cc;
+    color: #fff;
+}
+
+sidebar {
+    display: block;
+    flex: 1;
+    border: 1px solid #000;
+    padding-left: 1rem;
+}
+
+sidebar .__active {
+    font-weight: bold;
+}
+
+sidebar li {
+    cursor: pointer;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+sidebar li:hover {
+    text-decoration: underline;
+}
+
+mail-list {
+    display: block;
+    flex: 4;
+}
+
+mail-list header {
+    display: flex;
+    background-color: gray;
+    color: #fff;
+    padding: .5rem;
+}
+
+mail-list header div {
+    flex: 1;
+}
+
+mail-list header div:first-child {
+    padding-left: .5rem;
+}
+
+mail-list header div:last-child {
+    text-align: right;
+    padding-right: 1rem;
+}
+
+mail-details {
+    display: none;
+    flex: 4;
+}
+
+mail-details > div {
+    padding-left: 5rem;
+    padding-top: .5rem;
+}
+
+mail-details .message {
+    padding-top: .5rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+email:first-child div {
+    border-top: 1px solid #000;
+}
+
+email div {
+    display: flex;
+    border-bottom: 1px solid #000;
+    cursor: pointer;
+    margin-bottom: -1px;
+}
+
+email span {
+    flex: 1;
+}
+
+email span:first-child {
+    padding-left: 1rem;
+}
+
+email span:last-child {
+    text-align: right;
+    padding-right: 1rem;
+}

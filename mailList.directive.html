@@ -1,0 +1,14 @@
+<div ng-hide="appCtrl.message">
+  <header>
+    <div>From</div>
+    <div>Subject</div>
+    <div>Date</div>
+  </header>
+  <div ng-if="appCtrl.activeMailbox === list.id" ng-repeat="list in appCtrl.categories">
+    <email ng-repeat="mail in mailListCtrl.messages[appCtrl.activeMailbox]"></email>
+  </div>
+
+  <div ng-if="appCtrl.activeMailbox === 'all'" ng-repeat="list in appCtrl.categories">
+    <email ng-repeat="mail in mailListCtrl.messages[list.id]"></email>
+  </div>
+</div>
